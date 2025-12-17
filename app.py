@@ -1,6 +1,10 @@
 import pickle
 import numpy as np
 import streamlit as st
+import os
+print(os.listdir())
+with open("/mount/src/fish_poly/fish_poly.pkl", "rb") as f:
+    PR, poly, le = pickle.load(f)
 
 # Load model, poly features, and label encoder
 with open("fish_poly.pkl", "rb") as f:
