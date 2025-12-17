@@ -2,13 +2,12 @@ import pickle
 import numpy as np
 import streamlit as st
 import os
-print(os.listdir())
-with open("/mount/src/fish_poly/fish_poly.pkl", "rb") as f:
-    PR, poly, le = pickle.load(f)
 
-# Load model, poly features, and label encoder
+print("Files in current folder:", os.listdir())
+
 with open("fish_poly.pkl", "rb") as f:
     PR, poly, le = pickle.load(f)
+
 st.title("🐟 Fish Weight Prediction")
 
 species = st.selectbox("Select Species", le.classes_)
@@ -24,4 +23,3 @@ if st.button("Predict Weight"):
     input_poly = poly.transform(input_array)
     weight = PR.predict(input_poly)[0]
     st.success(f"Predicted Weight: {weight:.2f} grams")
-
