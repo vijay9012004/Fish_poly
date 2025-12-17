@@ -4,7 +4,7 @@ import numpy as np
 
 # Load pickle
 with open("fish_poly.pkl", "rb") as f:
-    PR, poly, le_Species = pickle.load(f)
+    PR, poly, le = pickle.load(f)
 
 st.title("🐟 Fish Weight Prediction App")
 
