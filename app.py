@@ -5,7 +5,9 @@ import streamlit as st
 # Set page configuration
 st.set_page_config(page_title="Fish Weight Predictor", page_icon="🐟")
 
-# Load model, poly features, and label encoder
+# -----------------------------
+# 1️⃣ Load model, polynomial transformer, and label encoder
+# -----------------------------
 @st.cache_resource
 def load_model():
     try:
@@ -20,6 +22,9 @@ model_assets = load_model()
 if model_assets:
     PR, poly, le = model_assets
 
+    # -----------------------------
+    # 2️⃣ Streamlit UI
+    # -----------------------------
     st.title("🐟 Fish Weight Prediction")
     st.write("Input the dimensions below to estimate the weight of the fish.")
 
@@ -36,17 +41,20 @@ if model_assets:
         h = st.number_input("Height (cm)", min_value=0.0, value=5.0)
         w = st.number_input("Width (cm)", min_value=0.0, value=3.0)
 
+    # -----------------------------
+    # 3️⃣ Predict button
+    # -----------------------------
     if st.button("Predict Weight", type="primary"):
-        # 1. Encode Species
+        # Encode Species
         species_enc = le.transform([species])[0]
         
-        # 2. Prepare Input Array
+        # Prepare Input Array
         input_array = np.array([[species_enc, l1, l2, l3, h, w]])
         
-        # 3. Transform to Polynomial Features
+        # Transform to Polynomial Features
         input_poly = poly.transform(input_array)
         
-        # 4. Predict
+        # Predict Weight
         weight = PR.predict(input_poly)[0]
         
         # Display Result
