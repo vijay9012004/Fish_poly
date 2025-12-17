@@ -1,30 +1,23 @@
-import streamlit as st
 import pickle
 import numpy as np
+import streamlit as st
 
-# Load pickle
+# Load model, poly features, and label encoder
 with open("fish_poly.pkl", "rb") as f:
     PR, poly, le = pickle.load(f)
+st.title("🐟 Fish Weight Prediction")
 
-st.title("🐟 Fish Weight Prediction App")
+species = st.selectbox("Select Species", le.classes_)
+l1 = st.number_input("Length1")
+l2 = st.number_input("Length2")
+l3 = st.number_input("Length3")
+h  = st.number_input("Height")
+w  = st.number_input("Width")
 
-# User input
-species = st.selectbox("Select Species", le_Species.classes_)
-l1 = st.number_input("Enter Length1 (L1)", min_value=0.0, step=0.1)
-l2 = st.number_input("Enter Length2 (L2)", min_value=0.0, step=0.1)
-l3 = st.number_input("Enter Length3 (L3)", min_value=0.0, step=0.1)
-h  = st.number_input("Enter Height (H)", min_value=0.0, step=0.1)
-w  = st.number_input("Enter Width (W)", min_value=0.0, step=0.1)
-
-# Predict button
 if st.button("Predict Weight"):
-    # Encode species
-    species_enc = le_Species.transform([species])[0]
-    # Create input array
-    new_fish = np.array([[species_enc, l1, l2, l3, h, w]])
-    # Polynomial transform
-    new_fish_poly = poly.transform(new_fish)
-    # Predict
-    predicted_weight = PR.predict(new_fish_poly)
-    st.success(f"Predicted Weight: {predicted_weight[0]:.2f} grams")
+    species_enc = le.transform([species])[0]
+    input_array = np.array([[species_enc, l1, l2, l3, h, w]])
+    input_poly = poly.transform(input_array)
+    weight = PR.predict(input_poly)[0]
+    st.success(f"Predicted Weight: {weight:.2f} grams")
 
